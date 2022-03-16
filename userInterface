@@ -1,0 +1,483 @@
+from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import ObjectProperty
+from kivy.lang.builder import Builder
+from kivy.uix.button import Button
+from kivy.core.window import Window
+from kivy.uix.image import Image
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.theming import ThemableBehavior
+from kivymd.uix.list import MDList
+from kivymd.uix.snackbar import Snackbar
+import requests
+from kivy.uix.screenmanager import ScreenManager, Screen
+import json
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
+from kivymd.app import MDApp
+from kivymd.uix.picker import MDDatePicker
+from kivy.uix.colorpicker import ColorPicker
+from kivymd.uix.picker import MDThemePicker
+
+config = {
+  "apiKey": "AIzaSyB2BZjMWxuuWGCxYiy39nM2QW6YNaEYejM",
+ " authDomain": "isaifirst-434b9.firebaseapp.com",
+  "databaseURL": "https://isaifirst-434b9-default-rtdb.firebaseio.com/",
+  "projectId": "isaifirst-434b9",
+  "storageBucket": "isaifirst-434b9.appspot.com",
+  "messagingSenderId": "577271030988",
+  "appId": "1:577271030988:web:bc9f35c4b8c6501b248e69",
+  "measurementId": "G-K8KL14RGJG",
+ "serviceAccount":"serviceAccount.json"
+
+}
+Window.size = (250, 500)
+
+
+class WelcomeScreen(MDApp):
+    pass
+
+
+class SignupScreen(Screen):
+    pass
+
+
+class Home(MDApp):
+    def screen(self, screen):
+        sm = ScreenManager()  # screenmanager
+        screens = {}  # screenmanager
+
+
+class SecondScreen():
+    def on_pre_enter(self):
+        self.ids.scr4.text = "Second Screen Updated"
+
+    """def __init__(self, *kwargs):
+        super(Home, self).__init__()
+          """
+
+
+class ContentNavigationDrawer(BoxLayout):
+    screen_manager = ObjectProperty()
+    nav_drawer = ObjectProperty()
+
+
+class services(MDApp):
+    def __init__(self):
+        super(services, self).__init__()
+        pass
+
+
+class NavigationDrawer(MDApp):
+    def build(self):
+        self.theme_cls.theme_style = "Dark"
+        self.screen = Builder.load_file('userhome.kv')
+        return self.screen
+
+    def show_date_picker(self):
+        date_dialog = MDDatePicker(mode="range")
+        date_dialog.open()
+
+    def color_theme_callback(self):
+        theme_dialog = MDThemePicker()
+        theme_dialog.open()
+
+    def userinput(self, phone, email, name, location, issue):
+        if len(phone) != 10:
+            err = Snackbar(text="invalid phone number", md_bg_color=[0, 0.3, 0, 1])
+            err.open()
+        else:
+            if len(phone) == 10:
+                err = Snackbar(text="Success")
+                err.open()
+        # def userinput(self, phone, email, name):
+
+        # def userinput(self, phone, email, name):
+        '''if len(name) == len(phone) == "":
+            err = Snackbar(text="invalid information")
+            err.open()
+        else:
+            if len(phone) == 10 and len(name) >= 1:
+                err = Snackbar(text="success")
+                err.open()'''
+        if len(name) == "":
+            err = Snackbar(text="must me more than 5 characters ")
+            err.open()
+        else:
+            if len(name) > 5:
+                err = Snackbar(text=" success")
+                err.open()
+
+            # valid=re.search("r^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$",email)
+            # SUBMITTING data to database.
+            url = "https://isaifirst-434b9-default-rtdb.firebaseio.com/.json"
+            JSON = {"phoneNum": f"{phone}", "useremail": f"{email}", "username": f"{name}", "location": f"{location}",
+                    "issue": f"{issue}"}
+            res = requests.post(url=url, json=JSON)
+    def send_comment(self,*args):
+        pass
+
+    def view_information(self, view_information):
+        url = "https://isaifirst-434b9-default-rtdb.firebaseio.com/.json"
+        self.auth_key = 'bTwFAO5zo89eyXpTu30B4C3Fh2hsw3p3JBDZOgYA'
+        from_database = requests.get(url=url + '?auth=' + self.auth_key)
+        # for data in database.json():
+        print(from_database.json())
+        new_label = self.root.ids.view_information
+        new_label.text = from_database.text
+
+
+NavigationDrawer().run()
+
+
+##################kivyfiles#########
+<ContentNavigationDrawer>:
+    orientation: "vertical"
+    padding: "0dp"
+    spacing: "0dp"
+    AnchorLayout:
+        anchor_x: "left"
+        size_hint: None,None
+        height: avatar.height
+        Image:
+            id: avatar
+            size_hint: None, None
+            size: "200dp", "200dp"
+
+            source: "7-Cs-Caregiving.jpg"
+    ScrollView:
+
+        MDList:
+            OneLineListItem:
+                text: "Home"
+                icon:"home"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr1"
+
+            OneLineListItem:
+                text: "About us"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr2"
+            OneLineListItem:
+                text: "services"
+                icon:"serves"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr3"
+            OneLineListItem:
+                text: "comment"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr4"
+            OneLineListItem:
+                text: "Announcement"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr5"
+Screen:
+
+    MDToolbar:
+        id: toolbar
+        pos_hint: {"top": 1}
+        elevation: 10
+        title: "Save A life"
+        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+        right_action_items: [["dots-vertical", lambda x: app.color_theme_callback()]]
+
+    MDNavigationLayout:
+        x: toolbar.height
+
+        ScreenManager:
+            id: screen_manager
+            Screen:
+                name: "scr1"
+                MDBoxLayout:
+                MDLabel:
+                    text:"Save a life"
+                    pos_hint:{"center_y":.85}
+                    font_style:"H6"
+                    halign:"center"
+                    theme_text_color:"Custom"
+                    text_color:0,0,0,1
+                MDRoundFlatButton:
+                    text:"services"
+                    height:'300dp'
+                    size_hint:.7,None
+                    pos_hint:{"center_x":.5,"center_y":.75}
+
+                MDRoundFlatButton:
+                    text:"About us"
+                    size_hint:.7,None
+                    pos_hint:{"center_x":.5,"center_y":.65}
+                    icon: 'arrow-left'
+
+                    ######press to the page#################
+
+                MDRoundFlatButton:
+                    text:"Book An Appointment"
+                    size_hint:.7,None
+                    pos_hint:{"center_x":.5,"center_y":.55}
+
+                MDRoundFlatButton:
+                    text:"date"
+                    size_hint:.7,None
+                    pos_hint:{"center_x":.5,"center_y":.45}
+                    on_release: app.show_date_picker()
+
+
+            Screen:
+                name: "scr2"
+                MDLabel:
+                    text:"About The App"
+                    pos_hint:{"center_x":.5,"center_y":85}
+                MDLabel:
+                    text:
+                        """With the production of the Model T automobile,
+                        Henry Ford had an unforeseen and tremendous
+                        impact on American life. He became regard
+                        With the production of the Model T automobile,
+                        Henry Ford had an unforeseen and tremendous
+                        impact on American life. He became regarded
+                        as an apt symbol of the transition from an
+                        agricultural to an industrial America."""
+                    halign: "left"
+                    padding_x:40
+            Screen:
+                name: "scr3"
+
+                MDLabel:
+                    text:"Provide Details"
+                    font_style:'H5'
+                    pos_hint:{'center_x':.5,'center_y':.82}
+                    halign:"center"
+                MDTextField:
+                    id:name
+                    hint_text: " Name:"
+                    helper_text: "Text is always here"
+                    pos_hint:{'center_x':.5,'center_y':.75}
+                    size_hint: .5, None
+                    height: "2dp"
+                    mode: "rectangle"
+                    #halign:'center'
+                MDTextField:
+                    id:Email
+                    hint_text: "Enter Email :"
+                    helper_text: "Text is always here"
+                    pos_hint:{'center_x':.5,'center_y':.65}
+                    size_hint: .5, None
+                    height: "2dp"
+                    mode: "rectangle"
+                MDTextField:
+                    id:phoneNumber
+                    hint_text: "Phone Number:"
+                    helper_text: "Text is always here"
+                    pos_hint:{'center_x':.5,'center_y':.55}
+                    size_hint: .5, None
+                    height: "2dp"
+                    mode: "rectangle"
+                MDTextField:
+                    id:location
+                    hint_text: "Location :"
+                    helper_text: "Text is always here"
+                    pos_hint:{'center_x':.5,'center_y':.45}
+                    size_hint: .5, None
+                    height: "2dp"
+                    mode: "rectangle"
+                MDTextField:
+                    id:issue
+                    hint_text: " issue.... :"
+                    helper_text: "Text is always here"
+                    pos_hint:{'center_x':.5,'center_y':.28}
+                    size_hint: .5, None
+                    height: "2dp"
+                    mode: "rectangle"
+                    multiline: True
+
+                MDRectangleFlatButton:
+                    text:"SUBMIT"
+                    pos_hint:{"center_x":.5,"center_y":.1}
+                    on_press:app.userinput(phoneNumber.text,Email.text,name.text,location.text,issue.text)
+            Screen:
+                name: "scr4"
+
+                MDLabel:
+                    text: "Comment"
+                    align: "center"
+                    pos_hint:{'center_x':.5,'center_y':.75}
+
+                MDTextField:
+                    id:comment
+                    hint_text: "  comment:"
+                    helper_text: "Text is always here"
+                    pos_hint:{'center_x':.33,'center_y':.55}
+                    size_hint:.4,None
+                    height: "2dp"
+                    mode: "rectangle"
+
+                    multiline:True
+                MDRoundFlatButton:
+                    id:send_comment
+                    text:"SUBMIT"
+                    pos_hint:{"center_x":.5,"center_y":.1}
+                    on_press:app.userinput(comment.text)
+            Screen:
+                name: "scr5"
+                MDLabel:
+                    text:"Announcements"
+                    font_style:'H5'
+                    pos_hint:{'center_x':.5,'center_y':.82}
+                    halign:"center"
+                    on_press:
+                MDRoundFlatButton:
+                    id:view_information
+                    text:" information"
+                    pos_hint:{"center_x":.5,"center_y":.75}
+                    size_hint:.5,None
+                    on_release:app.view_information(view_information.text)
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+<DrawerList>
+    MDLabel:
+        text:"Helow"
+##signup##
+
+from kivymd.app import MDApp
+from kivy.lang import Builder
+from kivymd.uix.snackbar import Snackbar
+from kivy.core.window import Window
+
+Window.size = (450, 500)
+
+
+class Tutorials(MDApp):
+    def build(self):
+        self.theme_cls.primary_palette = "Orange"
+        self.config.primary_color = "Green"
+        login_page = Builder.load_file('signup.kv')
+        phone, email, name, location, issue
+
+        return login_page
+
+
+
+if __name__ == "__main__":
+    Tutorials().run()
+
+kv############
+MDFloatLayout:
+    MDLabel:
+        text:"signup "
+        pos_hint:{"center_y":.95}
+        font_style:"H4"
+        halign:"center"
+        theme_text_color:"Custom"
+        text_color:0,0,1,1
+
+    MDTextField:
+        id:username
+        hint_text:"username"
+        pos_hint:{"center_x":.5,"center_y":.85}
+        current_hint_text_color:.0,0,0,1
+        size_hint_x:.8
+    MDTextField:
+        id:email
+        hint_text:"Enter Your Email"
+        pos_hint:{"center_x":.5,"center_y":.75}
+        current_hint_text_color:.0,0,0,1
+        size_hint_x:.8
+
+    MDTextField:
+        id:phone
+        hint_text:"phon number"
+        pos_hint:{"center_x":.5,"center_y":.65}
+        current_hint_text_color:.0,0,0,1
+        size_hint_x:.8
+    MDTextField:
+        id:password
+        hint_text:"Password"
+        pos_hint:{"center_x":.5,"center_y":.55}
+        current_hint_text_color:.0,0,0,1
+        size_hint_x:.8
+        md_bg_text_color:0,0,0,0
+        password:True
+    MDRaisedButton:
+        text:"Sign Up"
+        pos_hint:{"center_x":.5,"center_y":.20}
+        size_hint_x:.5
+        theme_text_color:"Custom"
+        text_color:0,0,0,1
+        on_release:app.verify(email.text,password.text)
+######sigin py
+from kivymd.app import MDApp
+from kivy.lang import Builder
+from kivy.core.window import Window
+
+Window.size = (450, 500)
+
+
+class Tutorials(MDApp):
+    def build(self):
+        self.theme_cls.primary_palette = "Orange"
+        self.config.primary_color = "Green"
+        login_page = Builder.load_file('signin.kv')
+
+        return login_page
+
+    def verify(self, email, password):
+
+        if email == "isaiah@gmail.com" and password == 1234:
+            print("Admin Logged in successfully")
+        else:
+            print("not logged in")
+
+
+if __name__ == "__main__":
+    Tutorials().run()
+
+
+##############signinn/login kv
+MDFloatLayout:
+    MDLabel:
+        text:"Login "
+        pos_hint:{"center_y":.75}
+        font_style:"H4"
+        halign:"center"
+        theme_text_color:"Custom"
+        text_color:0,0,1,1
+    MDLabel:
+        text:"user page"
+        pos_hint:{"center_y":.85}
+        font_style:"H4"
+        halign:"center"
+        theme_text_color:"Custom"
+        text_color:0,0,0,1
+    MDTextField:
+        id:email
+        hint_text:"Enter Your Email"
+        pos_hint:{"center_x":.5,"center_y":.6}
+        current_hint_text_color:0,0,1,1
+        size_hint_x:.8
+    MDTextField:
+        id:password
+        hint_text:"Password"
+        pos_hint:{"center_x":.5,"center_y":.45}
+        current_hint_text_color:0,0,1,1
+        size_hint_x:.8
+        password:True
+    MDRaisedButton:
+        text:"Log In"
+        pos_hint:{"center_x":.5,"center_y":.35}
+        size_hint_x:.5
+        theme_text_color:"Custom"
+        text_color:0,0,0,1
+        on_release:app.verify(email.text,password.text)
+
+flowerimage.jpg
+7-Cs-Caregiving.jpg
