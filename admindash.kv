@@ -1,0 +1,209 @@
+Screen:
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDToolbar:
+            title: "ADMINISTRATOR DASHBOARD"
+
+        MDTabs:
+            Tab:
+                title:"Home"
+                icon:"home"
+                md_bg_color:0,.2,1,.3
+                MDLabel:
+                    id: text1
+                    halign:"center"
+                    text:"ADMINISTRATOR"
+                    theme_text_color:"Custom"
+                    font_size:"40sp"
+                    font:"poppins"
+                    opacity:1
+                    pos_hint:{"center_y":.95}
+                MDLabel:
+                    id: text2
+                    halign:"center"
+                    text:"PAGE"
+                    font_size:"40sp"
+                    font:"poppins"
+                    pos_hint:{"center_y":.95}
+                    opacity:0
+                MDLabel:
+                    id: text3
+                    halign:"center"
+                    text:"WELCOME"
+                    font_size:"40sp"
+                    font:"poppins" 
+                    pos_hint:{"center_y":.95}
+                    opacity:0
+                MDLabel:
+                    id:home
+
+                    font_size:"25sp"
+                    opacity:1
+                    text:"1.  Database Record."
+                    pos_hint:{"center_y":.75}
+                MDLabel:
+                    id:home
+                    font_size:"25sp"
+                    opacity:1
+                    text:"  Home"
+                    icon:"home"
+                    pos_hint:{"center_y":.85}
+                MDLabel:
+                    id:home
+                    font_size:"25sp"
+                    opacity:1
+                    text:"2. Location Register."
+                    pos_hint:{"center_y":.65}
+                MDLabel:
+                    id:home
+                    font_size:"25sp"
+                    opacity:1
+                    halign:"left"
+                    text:"3. About The Company."
+                    pos_hint:{"center_y":.55}
+                MDLabel:
+                    id:home
+                    font_size:"25sp"
+                    opacity:2
+                    text:"4.Comments ."
+                    pos_hint:{"center_y":.45}
+                MDLabel:
+                    id:home
+                    font_size:"25sp"
+                    opacity:1
+                    text:"5.Sending Records ."
+                    pos_hint:{"center_y":.35}
+                MDLabel:
+                    id:home
+                    font_size:"25sp"
+                    opacity:1
+                    text:"6.Patient Recodes."
+                    pos_hint:{"center_y":.25}
+
+
+
+            Tab:
+                title:"Database"
+                icon:"database"
+                md_bg_color:0,.2,1,.9
+                ScrollView:
+                    MDBoxLayout:
+                        MDList:
+                            id:list
+                MDLabel:
+                    id: database
+                    text: "Databases"
+                    halign: "center"
+                MDBoxLayout:
+                    id:table_box
+                    pos_hint:{"center_x":5,"top":.8}
+                    size_hint:.9,.6
+                MDRectangleFlatButton:
+                    text:" DataBase"
+                    pos_hint:{"center_x":.09,"center_y":.95}
+                    on_press:app.databaseRegistry(database.text)
+                MDRectangleFlatButton:
+                    text:"Delete"
+                    pos_hint:{"center_x":.22,"center_y":.95}
+                    on_press:app.databaseRegistry(database.text)
+                MDRectangleFlatButton:
+                    text:"Update"
+                    pos_hint:{"center_x":.34,"center_y":.95}
+                    on_press:app.update(database.text)
+            Tab:
+                title:"Location"
+                icon:"map-marker"
+                md_bg_color:0,.2,1,.7
+                MDLabel:
+                    id: location
+                    text:"Locate The Patient"
+                    pos_hint:{"center_y":.85}
+                    font_style:"H4"
+                    halign:"center"
+                    font_size:'18sp'
+                    cursor_color:0,0,0,1
+                    theme_text_color:"Custom"
+                    text_color:0,0,0,1
+                MDTextField:
+                    id:url
+                    hint_text:"Enter URL of the Location:"
+                    pos_hint:{"center_x":.5,"center_y":.6}
+                    current_hint_text_color:0,0,1,1
+                    size_hint_x:.8
+
+                MDRectangleFlatButton:
+                    id:location
+                    text:"Find The place"
+                    pos_hint:{"center_x":.5,"center_y":.35}
+                    size_hint_x:.5
+                    theme_text_color:"Custom"
+                    text_color:0,0,0,1
+                    on_press:app.get_location(location.text)
+            Tab:
+                title:"Register"
+                icon:"account-plus"
+                md_bg_color:.4,.2,1,.9
+                MDLabel:
+                    id: register
+                    text: "Users"
+                    halign: "center"
+                MDFillRoundFlatIconButton:
+                    icon: "account"
+                    text:"Retrieve Registered Users"
+
+                    pos_hint:{"center_x":.33,"center_y":.95}
+                    on_press:app.registered(register.text)
+                    size_hint_x:.5
+            Tab:
+                title:"About Us"
+                icon:"information-outline"
+                md_bg_color:0,.2,.5,.3
+                MDLabel:
+                    id: about-us
+                    text: """ This is a legal system used This is a legal system used in common law countries where two advocates represent their  of the patients in common  obligated to disclose to the court."""
+                    halign: "center"
+            Tab:
+                title:"Comments"
+                icon:"comment-text-multiple-outline"
+                md_bg_color:1,0,.22,.1
+                MDLabel:
+                    id: comments
+                    #text: "Comments From The User"
+                    halign: "center"
+                MDFillRoundFlatIconButton:
+                    text:"comments"
+                    icon:"comments"
+                    pos_hint:{"center_x":.33,"center_y":.95}
+                    size_hint_x:.5
+                    halign:"center"
+                    on_press:app.commenting(comments.text)
+
+            Tab:
+                title:"Add Records"
+                md_bg_color:0,.6,1,.1
+
+                icon:"record"
+                MDTextField:
+                    id:get_patient_record
+                    hint_text: " comment:"
+                    helper_text: "Add Recorde"
+                    pos_hint:{'center_x':.5,'center_y':.45}
+                    size_hint:.7,.8
+                    height:"50dp"
+                    mode: "rectangle"
+                    multiline:True
+                    current_hint_text_color:(0,0,0,1)
+                    color: "Dark"
+                MDFillRoundFlatIconButton: 
+                    text:"Add Records"
+                    icon:"account-details"
+                    size_hint_x:.5
+                    pos_hint:{"center_x":.5,"center_y":.95}
+                    on_press:app.add_Records(get_patient_record .text)
+          
+          
+          
+          
+          
+          
